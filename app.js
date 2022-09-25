@@ -2,8 +2,10 @@ const express=require('express')
 const app=express()
 const cors=require('cors')
 const sql=require("mysql")
+const fs=require('fs')
+
 app.use(cors())
-app.use(express.json())
+app.use(express.json({limit: '10mb'}))
 var resulTosend=[]
 const pool=sql.createPool({
   host:"localhost",
@@ -60,7 +62,7 @@ app.post("/signin", (req,res)=>{
 
 app.get('/home',(req,res)=>{
   
-  pool.query(`select id,content,date,p.email,name from posts p ,users u where u.email=p.email`,(err,result,field)=>{
+  pool.query(`select id,content,date,p.email,name,photo from posts p ,users u where u.email=p.email`,(err,result,field)=>{
     if (err)
       return res.send('error')
     resulTosend=result
@@ -116,7 +118,24 @@ app.post("/home/like",(req,res)=>{
 
 })
 
+app.post('/upload', (req, res) => {
+  
+  pool.query(`select max(id) as id from posts`,(err,result,field)=>{
 
+    if(err)
+      return console.end(err)
+    
+    pool.query(`insert into posts values("${parseInt(result[0].id)+1}","${req.body.text}","${req.body.date}","${req.body.email}","${req.body.value}")`,(err,result,field)=>{
+      if (err)
+        return console.log(err)
+
+      res.send("succsseful")
+        
+    })
+  })
+  
+  return;
+});
 
 app.listen(5000,()=>{
     console.log("listening on port 5000...")
