@@ -20,14 +20,12 @@ app.get('/',(req,res)=>{
   res.end("you are in api")
 })
 
-
-
 app.post("/login",(req,res)=>{
      
      
      pool.query(`select name from users where password="${req.body.pass}" and email="${req.body.email}"`,(error,result,field)=>{
       if(error)
-       return console.log(error)
+       return  res.status(500).send('Something broke!');
        
       if(result.length===1)
         return res.json({login : "succssefull"})
@@ -123,11 +121,11 @@ app.post('/upload', (req, res) => {
   pool.query(`select max(id) as id from posts`,(err,result,field)=>{
 
     if(err)
-      return console.end(err)
+      return console.end(err+"1")
     
     pool.query(`insert into posts values("${parseInt(result[0].id)+1}","${req.body.text}","${req.body.date}","${req.body.email}","${req.body.value}")`,(err,result,field)=>{
       if (err)
-        return console.log(err)
+        return console.log(err+"2")
 
       res.send("succsseful")
         
@@ -136,7 +134,27 @@ app.post('/upload', (req, res) => {
   
   return;
 });
-
+app.put("/comment",(req,res)=>{
+  console.log(req.body)
+  pool.query(`insert into comments(email,id,date,cont) values("${req.body.email}","${req.body.id}","${req.body.date}","${req.body.value}")`,(err,result,field)=>{
+   if(err)
+     return console.log(err)
+   console.log(result+"thsi")
+   return res.send("successful")
+  })
+})
+app.get("/comment",(req,res)=>{
+  console.log(req.query)
+  pool.query(`select date,cont,image,name,num from comments s,users u where s.email=u.email and ${parseInt(req.query.id)}=id order by num`,(err,result,field)=>{
+    if(err)
+      return res.status(501).send("error")
+    console.log(result)
+    if(parseInt(req.query.l)>=result.length)
+      return res.end("commentEnd")
+    res.send(result[parseInt(req.query.l)])
+  })
+  return;
+})
 app.listen(5000,()=>{
     console.log("listening on port 5000...")
 })
