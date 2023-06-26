@@ -66,8 +66,10 @@ app.get('/home',(req,res)=>{
   pool.query(`select p.id,content,date,p.email,name,p.photo,u.photo as profile , (select count(*) as num from likes where id=p.id) as num from posts p ,users u where u.email=p.email and ${req.query.start}>=p.id order by(id) desc LIMIT 1`,(err,result,field)=>{
     if (err)
       return res.send('error11')
-          
-          res.send(result)
+     
+      if(result.length===0)
+       return res.end('last')
+      return res.send(result)
       })
   return;
 })
@@ -111,7 +113,8 @@ app.post("/home/like",(req,res)=>{
 
 })
 app.delete("/home:id",(req,res)=>{
-  pool.query(`delete from posts where ${req.params.id}=id`,(err,result,field)=>{
+  
+  pool.query(`delete from posts where ${req.params.id.substring(1)}=id`,(err,result,field)=>{
     if(err){
       console.log(err)
       return;
