@@ -2,21 +2,30 @@ const express=require('express')
 const app=express()
 const cors=require('cors')
 const sql=require("mysql")
-const iconv = require('iconv-lite');
-const { send } = require('process');
-const { error } = require('console');
+
+require('dotenv').config();
 const port = process.env.PORT
 app.use(cors())
 app.use(express.json({limit: '10mb'}))
-var resulTosend=[]
-const pool=sql.createPool({
-  host:"localhost",
-  user: "root",
-  password: "",
-  database: "media",
+
+
+
+
+
+
+const pool = sql.createPool({
   connectionLimit: 10,
-  charset: 'utf8mb4'
-})
+  host: 'containers-us-west-166.railway.app',
+  port: 6212,
+  user: 'root',
+  password: 'fFOn4SFaxExvfA3wkvDL',
+  database: 'railway'
+});
+
+
+
+
+
 app.get('/',(req,res)=>{
 
 
@@ -306,7 +315,7 @@ app.get('/userProfile:email',(req,res)=>{
     return;
 })
 app.listen(port,()=>{
-    console.log("listening on port 5000...")
+    console.log("listening on port "+port+"...")
 })
 
 
