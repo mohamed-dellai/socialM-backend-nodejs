@@ -5,7 +5,7 @@ const sql=require("mysql")
 const iconv = require('iconv-lite');
 const { send } = require('process');
 const { error } = require('console');
-
+const port = process.env.PORT
 app.use(cors())
 app.use(express.json({limit: '10mb'}))
 var resulTosend=[]
@@ -305,7 +305,7 @@ app.get('/userProfile:email',(req,res)=>{
     })
     return;
 })
-app.listen(5000,()=>{
+app.listen(port,()=>{
     console.log("listening on port 5000...")
 })
 
