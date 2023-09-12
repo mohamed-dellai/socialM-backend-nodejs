@@ -2,7 +2,6 @@ const express=require('express')
 const app=express()
 const cors=require('cors')
 const sql=require("mysql")
-
 require('dotenv').config();
 const port = process.env.PORT
 app.use(cors())
@@ -14,12 +13,12 @@ app.use(express.json({limit: '10mb'}))
 
 
 const pool = sql.createPool({
-  connectionLimit: 10,
-  host: 'containers-us-west-166.railway.app',
-  port: 6212,
-  user: 'root',
-  password: 'fFOn4SFaxExvfA3wkvDL',
-  database: 'railway'
+  connectionLimit: 5,
+  host: 'bjy0pz2lwkexbcjdvqxp-mysql.services.clever-cloud.com',
+  port: 3306,
+  user: 'uqcuhpyit5xwo54o',
+  password: 'qqwUJjPVUpCg6Ka91iAp',
+  database: 'bjy0pz2lwkexbcjdvqxp'
 });
 
 
